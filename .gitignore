@@ -1,0 +1,11 @@
+# Excludes secrets, Terraform variable overrides, Python bytecode caches, and local virtual environments from version control.
+
+.env
+*.tfvars
+__pycache__/
+venv/
+.terraform/
+infrastructure/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log

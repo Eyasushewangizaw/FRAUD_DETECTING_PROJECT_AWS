@@ -1,0 +1,1 @@
+# Tracks an empty tests/ directory in Git until pytest or other tests are added.

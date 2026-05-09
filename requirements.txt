@@ -1,0 +1,10 @@
+# Pinned dependency set for local development and Glue/Lambda-aligned scripts (pinned to stable releases on PyPI at generation time).
+
+boto3==1.43.6
+faker==40.15.0
+pandas==3.0.2
+pyarrow==24.0.0
+kafka-python==2.3.1
+awswrangler==3.16.1
+pytest==8.4.1
+psycopg2-binary==2.9.10
