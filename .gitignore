@@ -6,6 +6,7 @@ __pycache__/
 venv/
 .terraform/
 infrastructure/.terraform/
+infrastructure/.build/
 *.tfstate
 *.tfstate.*
 crash.log

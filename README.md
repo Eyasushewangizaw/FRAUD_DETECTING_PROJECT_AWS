@@ -15,7 +15,7 @@ End-to-end fraud analytics pipeline that streams events through Kinesis into an 
 
 ## Architecture
 
-![Architecture](docs/architecture.png)
+![alt text](aws-fraud-pipeline-architecture.png)
 
 ## Problem statement
 Fraud patterns evolve quickly, and the ability to detect suspicious activity in near real time can materially reduce financial loss and improve customer trust. However, real-time analytics requires more than model inference: it depends on reliable event ingestion, repeatable ETL, governed storage, and operational monitoring to prevent data drift and pipeline failures from silently impacting decisions.
