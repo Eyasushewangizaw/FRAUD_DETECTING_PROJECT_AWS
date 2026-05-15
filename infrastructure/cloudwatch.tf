@@ -28,7 +28,7 @@ resource "aws_cloudwatch_metric_alarm" "glue_job_failure" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    JobName = "fraud-detection-etl"
+    JobName = aws_glue_job.fraud_etl.name
   }
 
   alarm_actions = [aws_sns_topic.fraud_pipeline_alerts.arn]
@@ -68,7 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_error" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    FunctionName = "${var.project_name}-trigger"
+    FunctionName = aws_lambda_function.glue_trigger.function_name
   }
 
   alarm_actions = [aws_sns_topic.fraud_pipeline_alerts.arn]

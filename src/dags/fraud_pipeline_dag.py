@@ -11,9 +11,10 @@ Execution order note: ``data_quality_check`` runs **after** ``load_to_redshift``
 in Amazon Redshift (DQ would fail before any rows exist).
 
 Configure Airflow Variables (or overrides in deployment UI):
-  - ``fraud_curated_bucket``: S3 bucket for curated Parquet
-  - ``fraud_curated_s3_prefix``: key prefix passed to COPY (no leading ``s3://``)
-  - ``redshift_copy_iam_role_arn``: IAM role Redshift assumes for COPY
+  - ``fraud_datalake_bucket``: S3 datalake bucket name (same as Terraform output ``datalake_bucket_name``)
+  - ``fraud_curated_bucket``: S3 bucket for curated Parquet (typically same as ``fraud_datalake_bucket``)
+  - ``fraud_curated_s3_prefix``: key prefix passed to COPY (no leading ``s3://``), default ``curated/transactions``
+  - ``redshift_copy_iam_role_arn``: IAM role attached to Redshift for S3 COPY (Terraform output ``redshift_copy_iam_role_arn``)
 Connections: ``aws_default``, ``redshift_default``.
 """
 
@@ -101,6 +102,11 @@ with DAG(
         wait_for_completion=True,
         verbose=True,
         aws_conn_id="aws_default",
+        script_args={
+            "--JOB_NAME": GLUE_JOB_NAME,
+            "--S3_INPUT": "s3://{{ var.value.get('fraud_datalake_bucket') }}/raw/transactions/",
+            "--S3_OUTPUT": "s3://{{ var.value.get('fraud_datalake_bucket') }}/curated/transactions",
+        },
     )
 
     update_glue_catalog = GlueCrawlerOperator(
@@ -114,7 +120,7 @@ with DAG(
         task_id="load_to_redshift",
         schema=REDSHIFT_SCHEMA,
         table=REDSHIFT_TABLE,
-        s3_bucket="{{ var.value.get('fraud_curated_bucket') }}",
+        s3_bucket="{{ var.value.get('fraud_curated_bucket') or var.value.get('fraud_datalake_bucket') }}",
         s3_key="{{ var.value.get('fraud_curated_s3_prefix', 'curated/transactions') }}",
         redshift_conn_id="redshift_default",
         aws_conn_id="aws_default",

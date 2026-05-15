@@ -1,8 +1,8 @@
 -- DDL for core fraud mart tables on Amazon Redshift (fact + merchant dimension aligned to pipeline curated fields).
 
-CREATE SCHEMA fraud;
+CREATE SCHEMA IF NOT EXISTS fraud;
 
-CREATE TABLE fraud.fact_transactions (
+CREATE TABLE IF NOT EXISTS fraud.fact_transactions (
     transaction_id          VARCHAR(50) NOT NULL,
     card_number_hash        VARCHAR(64),
     merchant_id             VARCHAR(50) NOT NULL,
@@ -25,7 +25,7 @@ DISTKEY (merchant_id)
 -- SORTKEY orders storage on transaction time so time-bounded dashboards, alerts, and “last N days” scans prune blocks via zone maps.
 SORTKEY (transaction_timestamp);
 
-CREATE TABLE fraud.dim_merchants (
+CREATE TABLE IF NOT EXISTS fraud.dim_merchants (
     merchant_id       VARCHAR(50) NOT NULL PRIMARY KEY,
     merchant_name     VARCHAR(256),
     merchant_category VARCHAR(50),
